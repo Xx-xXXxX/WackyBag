@@ -1,0 +1,96 @@
+﻿<#@ assembly name="System.Core" #>
+<#+
+public abstract class RepeatFormGenerator
+{
+	public virtual int StartPos => 0;
+	public abstract string FormFn(int i);
+	//public Func<string, string, string> CombineFn = (a, b) => $"{a}{b}";
+	public virtual void CombineFn(StringBuilder Main, string b) { 
+		Main.Append(b);
+	}
+	public string Gen(int count)
+	{
+		return Gen(StartPos, StartPos + count);
+	}
+	public string Gen(int From, int To) {
+		StringBuilder str = new(FormFn(From));
+		for (int i = From + 1; i < To; ++i)
+		{
+			CombineFn(str, FormFn(i));
+		}
+		return str.ToString();
+	}
+}
+
+public class RepeatFormGeneratorDelegate: RepeatFormGenerator
+{
+	public RepeatFormGeneratorDelegate(Func<int, string> formFn, Action<StringBuilder, string>? combineFn=null){
+		FormFnDelegate=formFn;
+		CombineFnDelegate=combineFn?? DirectCombine;
+	}
+	public Func<int, string> FormFnDelegate;
+	public Action<StringBuilder, string> CombineFnDelegate;
+	public override string FormFn(int i)
+	=>FormFnDelegate(i);
+	public override void CombineFn(StringBuilder Main, string b)
+	=> CombineFnDelegate(Main,b);
+	public static void DirectCombine(StringBuilder Main, string b)
+	{
+		Main.Append(b);
+	}
+	public static void DotCombine(StringBuilder Main, string b)
+	{
+		Main.Append(',').Append(b);
+	}
+}
+
+public class TypeGen : RepeatFormGenerator {
+	public override string FormFn(int i)
+	=> $"T{i}";
+	public override void CombineFn(StringBuilder Main, string b)
+	{ 
+		Main.Append(',').Append(b);
+	}
+	public readonly static TypeGen V = new TypeGen();
+}
+
+public class TypeWhereGen : RepeatFormGenerator {
+	public readonly string TypeLim;
+
+	public TypeWhereGen(string typeLim)
+	{
+		TypeLim = typeLim;
+	}
+
+	public override string FormFn(int i)
+	=> $"where T{i} : {TypeLim}\n";
+}
+public static class Utils{
+	public static void CombineEnum(int n, int r, Action<List<int>> Fn) {
+		if (r == 0) return;
+		if (r == 1)
+		{
+			for (int i = 0; i < n; i++)
+			{
+				Fn(new List<int>() { i });
+			}
+		}
+		else if (n == r) {
+			List<int> l=new();
+			for (int i = 0; i < n; i++) {
+				l.Add(i);
+			}
+			Fn(l);
+		}
+		else
+		for (int i=r-1;i<n;i++) {
+			CombineEnum(i, r - 1,
+				(list)=> {
+					list.Add(i);
+					Fn(list);
+				}
+			);
+		}
+	}
+}
+#>
