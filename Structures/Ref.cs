@@ -20,15 +20,5 @@ namespace WackyBag.Structures
 			this.ptr = ptr;
 		}
 	}
-	//public ref struct RefR<T>
-	//{
-	//	ref T value;
-	//	public ref T Value => ref value;
-	//	public void SetValue(ref T value) { 
-	//		this.value = value;
-	//	}
-	//	public RefR(ref T value) {
-	//		this.value = value;
-	//	}
-	//}
+	
 }
