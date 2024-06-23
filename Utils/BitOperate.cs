@@ -134,17 +134,17 @@ namespace WackyBag.Utils
 			return sb.ToString();
 		}
 
-		public const int IntSizeLog = 4;
-		public const int ByteSizeLog = 3;
+		private const int BytePerInt = sizeof(int);
+		private const int BitPerByte = 3;
 
 		public static bool GetBitInArray(int[] arr, int index)
 		{
-			var (a, b) = BitOperate.Separate(index, IntSizeLog + ByteSizeLog);
+			var (a, b) = BitOperate.Separate(index, sizeof(int) + BitPerByte);
 			return BitOperate.GetBits(arr[a], b, 1) == 1;
 		}
 		public static void SetBitInArray(int[] arr, int index, bool value)
 		{
-			var (a, b) = BitOperate.Separate(index, IntSizeLog + ByteSizeLog);
+			var (a, b) = BitOperate.Separate(index, sizeof(int) + BitPerByte);
 			arr[a] = BitOperate.SetBits(arr[a], value ? 1 : 0, b, 1);
 		}
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
@@ -152,9 +152,10 @@ namespace WackyBag.Utils
 		{
 			return ToBitString(BitConverter.GetBytes(data));
 		}
+		/*
 		public static int ToInt(float d)
 		{
-			return BitConverter.ToInt32(BitConverter.GetBytes(d), 0);
+			return BitConverter.SingleToInt32Bits(d);//BitConverter.ToInt32(BitConverter.GetBytes(d), 0);
 		}
 		public static int ToInt(uint d)
 		{
@@ -166,15 +167,15 @@ namespace WackyBag.Utils
 		}
 		public static uint ToUInt(float d)
 		{
-			return BitConverter.ToUInt32(BitConverter.GetBytes(d), 0);
+			return BitConverter.SingleToUInt32Bits(d);
 		}
 		public static float ToFloat(int d)
 		{
-			return BitConverter.ToSingle(BitConverter.GetBytes(d), 0);
+			return BitConverter.Int32BitsToSingle(d);//.ToSingle(BitConverter.GetBytes(d), 0);
 		}
 		public static float ToFloat(uint d)
 		{
-			return BitConverter.ToSingle(BitConverter.GetBytes(d), 0);
+			return BitConverter.UInt32BitsToSingle(d);//BitConverter.ToSingle(BitConverter.GetBytes(d), 0);
 		}
 		public static ulong ToULong(long d)
 		{
@@ -186,10 +187,7 @@ namespace WackyBag.Utils
 		}
 		public static ulong ToULong(int d1, int d2)
 		{
-			byte[] vs = new byte[8];
-			Array.Copy(BitConverter.GetBytes(d1), 0, vs, 0, 4);
-			Array.Copy(BitConverter.GetBytes(d2), 0, vs, 4, 4);
-			return BitConverter.ToUInt64(vs, 0);
+			return (ulong)//BitConverter.ToUInt64(vs, 0);
 		}
 		public static ulong ToULong(float d1, float d2)
 		{
@@ -307,7 +305,7 @@ namespace WackyBag.Utils
 		{
 			byte[] vs = BitConverter.GetBytes(d);
 			return (BitConverter.ToSingle(vs, 0), BitConverter.ToSingle(vs, 4));
-		}
+		}*/
 #pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
 	}
 }

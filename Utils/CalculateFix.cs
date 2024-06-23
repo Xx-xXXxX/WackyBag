@@ -9,38 +9,8 @@ using System.Threading.Tasks;
 
 namespace WackyBag.Utils
 {
-	public static class LinearCalculate
+	public static class CalculateFix
 	{
-		/// <summary>
-		/// 从a到b的size
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		public static Size SizeFromPoint(Point a, Point b) => new(b.X - a.X, b.Y - a.Y);
-		/// <summary>
-		/// 获取包含a和b的矩形
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		public static Rectangle Union(Rectangle a, Rectangle b)
-		{
-			Point point1 = new(Math.Min(a.X, b.X), Math.Min(a.Y, b.Y));
-			Point point2 = new(Math.Min(a.Right, b.Right), Math.Min(a.Bottom, b.Bottom));
-
-			return new Rectangle(point1, SizeFromPoint(point1, point2));
-		}
-		/// <summary>
-		/// a和b是否相邻（不相交）
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		public static bool Adjoin(this Rectangle a, Rectangle b)
-		{
-			return (a.Top == b.Bottom + 1) || (a.Bottom + 1 == b.Top) || (a.Left == b.Right + 1) || (a.Right + 1 == b.Left);
-		}
 		public static Vector2Fix ToRotatedVector(this Rotation rotation)
 		{
 			return rotation switch

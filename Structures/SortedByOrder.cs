@@ -30,10 +30,6 @@ namespace WackyBag.Structures
 		/// </summary>
 		protected bool updated = false;
 		/// <summary>
-		/// 继承所在层
-		/// </summary>
-		public readonly int level = 0;
-		/// <summary>
 		/// 父对象
 		/// </summary>
 		public readonly SortedByOrder<TValue>? Parent = null;
@@ -68,7 +64,6 @@ namespace WackyBag.Structures
 			/// 位置
 			/// </summary>
 			public readonly int index;
-			public readonly SortedByOrderNode? super;
 			/// <summary>
 			/// 排序时的状态
 			/// </summary>
@@ -96,10 +91,6 @@ namespace WackyBag.Structures
 				Container = container;
 				this.Value = Value;
 				this.index = index;
-			}
-			public SortedByOrderNode(SortedByOrder<TValue> container, SortedByOrderNode extend) : this(container, extend.Value, extend.index)
-			{
-				this.super = extend;
 			}
 			/// <summary>
 			/// 在该节点之前的节点

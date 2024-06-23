@@ -7,13 +7,17 @@ using System.Threading.Tasks;
 
 namespace WackyBag.Structures.Collections
 {
-	public interface ITypedList<TBase> :IReadOnlyList<TBase>, IEnumerable<TBase> {
-		public int Add(TBase v);
-		public TBase Get(int id);
+	public interface IReadOnlyTypedList<TBase> : IReadOnlyList<TBase>, IEnumerable<TBase>
+	{
 		public T Get<T>(IdOf<T> id)
 			where T : TBase;
 	}
 
+	public interface ITypedList<TBase> : IReadOnlyTypedList<TBase>
+	{
+		public int Add(TBase v);
+	}
+	//[Obsolete("Use Util.Get")]
 	public class TypedList<TBase>: ITypedList<TBase>
 	{
 		protected readonly List<TBase> values = [];
@@ -41,4 +45,6 @@ namespace WackyBag.Structures.Collections
 			return ((IEnumerable)values).GetEnumerator();
 		}
 	}
+
+	
 }

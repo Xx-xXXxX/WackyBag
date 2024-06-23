@@ -19,7 +19,7 @@ namespace WackyBag.Calculate.Grid
         /// <summary>
         /// 已计算的格子列表
         /// </summary>
-        public static List<(Point, Fix64)> CirclePointList = [];
+        public static readonly List<(Point, Fix64)> CirclePointList = [];
 		/// <summary>
 		/// 已计算的距离半径,在该范围内的所有格子都在列表中
 		/// </summary>
@@ -38,7 +38,7 @@ namespace WackyBag.Calculate.Grid
 		/// <summary>
 		/// 已计算但未确定顺序的格子列表
 		/// </summary>
-		public static SortedDictionary<Fix64, List<(Point, Fix64)>> ValuesConsidering = new() {
+		public static readonly SortedDictionary<Fix64, List<(Point, Fix64)>> ValuesConsidering = new() {
             { 0,new(){(new(0,0),0) } }
         };
         private static int calculatedSize = 0;

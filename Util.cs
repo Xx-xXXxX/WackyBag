@@ -1,5 +1,6 @@
 ﻿using FixMath;
 
+using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
 using System.Reflection;
@@ -333,8 +334,6 @@ namespace WackyBag
 		}
 		#endregion
 
-		
-
 		public static void CombineEnum(int n, int r, Action<List<int>> Fn) {
 			if (r == 0) return;
 			if (r == 1)
@@ -361,7 +360,36 @@ namespace WackyBag
 				);
 			}
 		}
-		
+
+		public static T Get<TBase,T>(IReadOnlyList<TBase> values, IdOf<T> id)
+			where T : TBase
+			=> (T)values[(int)id]!;
+
+		/// <summary>
+		/// enum (ak,ak+1), and (an,a0)
+		/// 每个元素都会出现两次
+		/// </summary>
+		public static IEnumerable<(T, T)> EnumPairs<T>(this IEnumerable<T> ts)
+		{
+			List<T> l = ts.ToList();
+			for (int i = 0; i < l.Count - 1; ++i) yield return (l[i], l[i + 1]);
+			yield return (l[^1], l[0]);
+		}
+		public static int ToDirect(this int v) => v == 0 ? -1 : 1;
+		public static int ToDirect(this uint v) => v == 0 ? -1 : 1;
+
+		public static void AddTo<TKey, TValue>(this TValue value, IDictionary<TKey, TValue> dict, TKey key) {
+			dict.Add(key, value);
+		}
+		public static void AddTo<TKey, TValue>(this KeyValuePair<TKey,TValue> kvp, IDictionary<TKey, TValue> dict)
+		{
+			dict.Add(kvp);
+		}
+
+		public static void AddTo<TKey, TValue>(this (TKey Key,TValue Value) kvp, IDictionary<TKey, TValue> dict)
+		{
+			dict.Add(kvp.Key,kvp.Value);
+		}
 	}
 	public enum Rotation : byte
 	{
